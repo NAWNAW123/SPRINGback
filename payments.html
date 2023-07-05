@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>payment</title>
+
+    <link rel="stylesheet "type="text/css" href="index.css">
+    <link rel="stylesheet "type="text/css" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+</head>
+<body>
+    <h1>Phone Shopping System</h1>
+    <h2>payment </h2>
+    <h2>Summary order</h2>
+    <p>name:{{ request.GET.name }}</p>
+    <p>price:{{ request.GET.price }}</p>
+
+    <h3>Payment informations:</h3>
+    <form action="/payment/" method="post">
+        {% csrf_token %}
+        <label for="payno">Payment number:</label>
+        <input type="text" id="payno" name="payno">
+
+        <button type="submit" class="btn-success"  >pay now</button>
+    </form>
+
+    
+</body>
+</html>

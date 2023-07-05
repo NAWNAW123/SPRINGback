@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Page</title>
+   <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <style>
+    body {
+      padding-top: 60px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <a class="navbar-brand" href="#">Phone Shopping System</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+     
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <a class="navbar-brand" href="#">
+            <i class="fas fa-home"></i>
+            Home
+          </a>
+         
+          <li class="nav-item">
+            <a class="nav-link" href="Customerlist.html">Customer List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="productList.html">Product List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Orderlist.html">Order List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="Customerlist.html">
+              <i class="fas fa-users"></i>
+              Admin
+            </a>
+            </li>
+        </ul>
+      </div>
+    </nav>
+
+  <!-- Admin Panel -->
+  <div class="container-fluid">
+    <div class="row">
+    <div class="col-md-2 bg-light">
+        <h4>Admin:nawnaw</h4>
+        <p>nawnaw@icloud.com</p> 
+        <button  class="btn btn-primary" onclick=window.location='AddProduct.html'>+ Add</button>
+
+       
+      </div>
+      <div class="col-md-10">
+        <!-- Main Content -->
+        
+        
+        
+        
+        <!-- Table -->
+        <table class="table">
+          <thead>
+            <tr>
+                <th>ID</th>
+                <th>name</th>
+                <th>price</th>
+                <th>action</th>
+             </tr>
+          </thead>
+          <tbody>
+            <tbody id="pbody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    fetch("http://localhost:8080/product/list")
+    .then((data)=>{
+        return data.json();
+    }).then((DATA)=>{
+        let tdata="";
+        DATA.forEach((item)=>{
+            tdata+=`
+            <tr>
+                <td>${item.pro_id}</td>
+                <td>${item.product_name}</td>
+                <td>${item.product_price}</td>
+                <td>
+                    <a href="EditProduct.html?id=${item.pro_id}"  class="btn btn-primary" >
+                      <i class="fas fa-edit"></i>
+               </a>
+ </a>
+                    <button class="btn btn-danger" onclick="deleteCustomer(${item.pro_id})">
+  <i class="fas fa-trash-alt"></i>
+</button>
+
+                    
+                </td>
+                
+            </tr>
+            `;
+        });
+        document.getElementById('pbody').innerHTML=tdata;
+    })
+
+    const url= new URLSearchParams(window.location.search);
+    const newurl=url.get('id');
+
+    fetch(`http://localhost:8080/product/delete/${newurl}`,{
+        method:'DELETE',
+        headers:{
+            'Content-Type':'application/Json'
+        }
+    }).then(res=>{
+        if(res.ok){
+            console.log("data deleted successfully")
+            // window.location.reload()
+        }else{
+            console.log("Error occur when deleted")
+        }return res
+    }).then (res=>console.log(res))
+
+
+
+</script>
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="static/bootstrap/js/jquery.js"></script>
+  <script src="static/bootstrap/js/popper.js"></script>
+</body>
+</html>

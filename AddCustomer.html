@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/index.css">
+    <title>Add customer admin</title>
+</head>
+<body>
+  <div class="container">
+    <h2>customer </h2>
+      <form id="registrationForm" method="post">
+          <div class="form-group">
+             <label for="no">Mobile:</label>
+              <input type="long" id="no"  name="mobile" >
+            </div>
+            <div class="form-group">
+              <label for="email">Email-address:</label>
+              <input type="text" id="email"  name="addres" >
+            </div>
+            <div class="form-group">
+              <label for="fname">First name:</label>
+              <input type="text" id="fname"  name="first_name" >
+            </div>
+            <div class="form-group">
+              <label for="lname">Last name:</label>
+              <input type="text" id="lname"  name="last_name" >
+            </div>
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="text" id="password" name="password">
+            </div>
+
+            <button  type="submit"  class="btn btn-success"  >Save</button>
+            <a href="Customerlist.html"    class=" btn btn-primary"  >back</a>
+        </div>
+      </form>
+  </div>
+
+<script>
+    const registrationForm = document.getElementById('registrationForm');
+    registrationForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const no = document.getElementById('no').value;
+        const email = document.getElementById('email').value;
+        const fname = document.getElementById('fname').value;
+        const lname = document.getElementById('lname').value;
+        const password = document.getElementById('password').value;
+
+        const addCustomer = {
+          mobile: no,
+          address: email,
+          first_name: fname,
+          last_name: lname,
+          password: password
+        };
+
+        fetch('http://localhost:8080/customer/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(addCustomer)
+        })
+        .then(response => response.json())
+        .then(data => {
+          console.log('saved', data);
+          alert('Successfully saved');
+          window.location.href='productList.html';
+
+  }).catch(error=>{
+    console.error('Erro',error);
+  });
+});
+</script>
+</body>
+</html>

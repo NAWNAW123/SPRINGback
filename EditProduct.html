@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditProduct</title>
+    <link rel="stylesheet" href="static/bootstrap/css/bootstrap.min.css">
+
+</head>
+<style>
+     body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      padding: 20px;
+    }
+    
+    .container {
+      max-width: 400px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      
+      display: flex;
+      flex-direction: column;
+    }
+</style>
+<body>
+    <p></p>
+  <div class="container">
+    
+   
+    <h2>
+        
+            product Form
+    </h2>
+     
+  
+    <form id="productform" >
+       
+  
+      <div class="form-group">
+        <label for="name"> Product name:</label>
+        <input type="text" id="name" name="product_name"  >
+      </div>
+      <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="price" id="price" name="product_price"  >
+      </div>
+
+      <button  type="submit"  class="btn btn-success"  >edit</button>
+     
+      <a href="productList.html" class="btn btn-primary">Back</a>
+     
+      
+    </form>
+  </div>
+  <script>
+
+   // Retrieve product data and populate the form
+const url = new URLSearchParams(window.location.search);
+const newurl = url.get('id');
+fetch(`http://localhost:8080/product/getbyId/${newurl}`)
+
+  .then(response => response.json())
+  .then(product => {
+    document.getElementById('name').value = product.product_name;
+    document.getElementById('price').value = product.product_price;
+  });
+
+// Add event listener to the form submit
+const frm = document.getElementById('productform');
+frm.addEventListener('submit', (event) => {
+  event.preventDefault();
+
+  // Retrieve the updated values from the form
+  const name = document.getElementById('name').value;
+  const price = document.getElementById('price').value;
+
+  // Create an object with the updated product data
+  const updatedProduct = {
+    product_name: name,
+    product_price: price
+  };
+
+  // Send updated data to the server
+  fetch(`http://localhost:8080/product/update/${newurl}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(updatedProduct)
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Updated product:', data);
+      // Optionally, redirect to the product list page
+      window.location.href = 'productList.html';
+    })
+    .catch(error => {
+      console.error('Error updating product', error);
+    });
+});
+
+
+
+
+
+
+
+
+    //      // ku edit file
+
+    // const edit =document.getElementById('edit');
+    // edit.addEventListener('submit',(e)=>{
+    //     e.preventDefault();
+        
+
+    //     let ID =document.getElementById(pro_id);
+    //     let pname =document.getElementById(pro_name);
+    //     let price =document.getElementById(pro_price);
+
+    //     const formdata =new FormData(form);
+    //     const product =Object.fromEntries(formdata.entries());
+
+    //     fetch(`http://localhost:8080/product/update/${pro_id}`,{
+    //         method:'PUT',
+    //         headers:{
+    //             'Content-Type':'application/json'
+    //         },
+    //         body:JSON.Long(pro_id)
+    //     })
+    //     .then (response=>response.json())
+    //     .then(data =>{
+    //         console.log('User Created',data);
+    //         alert('User has been created succsesfully');
+
+    //     }).catch(error=>{
+    //         console.error('ERROR',error)
+    //     });
+        
+    // });
+  </script>
+</body>
+
+</html>

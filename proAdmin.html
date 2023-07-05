@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <table border="2">
+        <thead>
+           
+            <tr>
+               <th>ID</th>
+
+               <th>name</th>
+               <th>price</th>
+               <th>action</th>
+            </tr>
+        </thead>
+        <tbody id="pbody">
+
+        </tbody>
+    </table>
+</body>
+
+
+<script>
+    fetch("http://localhost:8080/product/list")
+    .then((data)=>{
+        return data.json();
+    }).then((DATA)=>{
+        let tdata="";
+        DATA.forEach((item)=>{
+            tdata+=`
+            <tr>
+                <td>${item.pro_id}</td>
+                <td>${item.product_name}</td>
+                <td>${item.product_price}</td>
+                <td>
+                    <a href="admin.html?id=${item.pro_id}">EDIT </a>
+                    <a href="admin.html?id=${item.pro_id}"> DELETE</a>
+                    
+                </td>
+                
+            </tr>
+            `;
+        });
+        document.getElementById('pbody').innerHTML=tdata;
+    })
+
+    const ur= new urSearchParams(window.location.search);
+    const newur=ur.get('id');
+
+    fetch(`http://localhost:8080/product/delete/${newur}`,{
+        method:'DELETE',
+        headers:{
+            'Content-Type':'application/Json'
+        }
+    }).then(res=>{
+        if(res.ok){
+            console.log('data deleted')
+            // window.location.reload()
+        }else{
+            console.log("unsuccsesfully deleted")
+        }return res
+    }).then (res=>console.log(res))
+
+
+</script>
+</html>
